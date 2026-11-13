@@ -1,0 +1,38 @@
+name: Run tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Website to test (leave empty to use pytest.ini)"
+        required: false
+        default: 
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v6
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+      - name: Install libraries
+        run: pip install -r requirements.txt
+      - name: Install browser
+        run: python -m playwright install --with-deps chromium
+      - name: Run tests
+        run: pytest tests
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-report
+          path: reports/
+          retention-days: 7

@@ -1,0 +1,30 @@
+# Python virtual environment (each machine creates its own)
+venv/
+.venv/
+
+# Files Python and pytest generate when running
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Playwright results (screenshots, videos, traces)
+test-results/
+
+# HTML reports (regenerated on every run)
+reports/
+report.html
+report_*.html
+
+# Log files
+*.log
+
+# Secrets: never commit
+.env
+.env.*
+!.env.example
+
+# Editor and operating system files
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
