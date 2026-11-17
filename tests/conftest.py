@@ -52,6 +52,7 @@ def create_account(api, random_email):
     )
     assert response.status == 201
     user_id = response.json()["id"]
+    print("Create account")
     yield payload
 
     payload_admin = {
@@ -59,6 +60,7 @@ def create_account(api, random_email):
     "password": "welcome01"
     }
     admin_login = api.post("users/login", data=payload_admin)
+    print("Admin login")
     assert admin_login.status == 200
     token_admin = admin_login.json()["access_token"]
 
@@ -67,3 +69,4 @@ def create_account(api, random_email):
         headers={"Authorization": f"Bearer {token_admin}"}
         )
     assert admin_delete_user.status == 204
+    print("Admin delected user")
