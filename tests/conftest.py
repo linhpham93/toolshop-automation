@@ -1,6 +1,7 @@
 import pytest
 import uuid
 from pages.home import HomePage
+from pages.product_page import ProductPage
 
 API_URLS	 = {
     "https://practicesoftwaretesting.com": "https://api.practicesoftwaretesting.com",
@@ -83,3 +84,22 @@ def home_page(page):
     home = HomePage(page)
     home.open_home_page()
     yield home
+
+@pytest.fixture
+def product_id(api):
+    response_product_list = api.get("products?page=1")
+    product_id = response_product_list.json()["data"][0]["id"]
+    product_name = response_product_list.json()["data"][0]["name"]
+    product_price = response_product_list.json()["data"][0]["price"]
+    product_info = {
+        "id" :  product_id,
+        "name" : product_name,
+        "price" : product_price
+    }
+    return product_info
+
+@pytest.fixture
+def product_detail_page(page, product_id):
+    product_detail_page = ProductPage(page)
+    product_detail_page.open_product_detail(product_id["id"])
+    return product_detail_page
