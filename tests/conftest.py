@@ -1,10 +1,17 @@
 import pytest
 import uuid
+from pages.home import HomePage
 
 API_URLS	 = {
     "https://practicesoftwaretesting.com": "https://api.practicesoftwaretesting.com",
     "https://with-bugs.practicesoftwaretesting.com" : "https://api-with-bugs.practicesoftwaretesting.com"
 }
+
+@pytest.fixture(scope="session")
+def browser_context_args(browser_context_args):
+    args = dict(browser_context_args)
+    args["viewport"] = {"width": 1920, "height": 1080}
+    return args
    
 @pytest.fixture(scope="session")
 def base_url(pytestconfig):
@@ -70,3 +77,9 @@ def create_account(api, random_email):
         )
     assert admin_delete_user.status == 204
     print("Admin delected user")
+
+@pytest.fixture
+def home_page(page):
+    home = HomePage(page)
+    home.open_home_page()
+    yield home
