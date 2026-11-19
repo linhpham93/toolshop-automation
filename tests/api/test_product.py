@@ -1,5 +1,8 @@
 from rich import print
+import pytest
 
+
+@pytest.mark.apionly
 def test_a5_get_product(api):
     response_product_list = api.get("products?page=1")
     product_id = response_product_list.json()["data"][0]["id"]
