@@ -15,5 +15,5 @@ class HomePage():
         self.search_btn.click()
 
     def sort_low_to_high(self):
-        self.sort_option.select_option(value="price,asc")
+        self.sort_option.select_option(label="Price (Low - High)")
         

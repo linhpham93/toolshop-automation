@@ -12,5 +12,5 @@ def test_u2_search_product(home_page):
         assert key != []
         assert "pliers" in key.lower()
 
-def test_u3_sort_low_to_high(sort_low_to_high):
-    assert sort_low_to_high == sorted(sort_low_to_high, reverse=False)
+def test_u3_sort_low_to_high(sort_low_to_high_result):
+    assert sort_low_to_high_result == sorted(sort_low_to_high_result, reverse=False)

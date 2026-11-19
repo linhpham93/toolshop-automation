@@ -3,13 +3,15 @@ import uuid
 from pages.home import HomePage
 from pages.product_page import ProductPage
 from playwright.sync_api import expect
+from datetime import datetime
+import time
 
 API_URLS	 = {
     "https://practicesoftwaretesting.com": "https://api.practicesoftwaretesting.com",
     "https://with-bugs.practicesoftwaretesting.com" : "https://api-with-bugs.practicesoftwaretesting.com"
 }
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def browser_context_args(browser_context_args):
     args = dict(browser_context_args)
     args["viewport"] = {"width": 1920, "height": 1080}
@@ -129,6 +131,15 @@ def sort_low_to_high_result(home_page):
     expect(home_page.page.locator('[data-test="sorting_completed"]')).to_be_visible()
     prices = home_page.product_price.all_inner_texts()
     numbers = [float(text.replace("$", "")) for text in prices]
-    print(numbers)
+    assert numbers == sorted(numbers)
     return numbers
 
+def pytest_html_report_title(report):
+    report.title = "Mini project Test Report"
+
+def pytest_metadata(metadata, config):
+    base_url = (config.getoption("base_url") or config.getini("base_url")).rstrip("/")
+    metadata["Environment"] = "Practice site"
+    metadata["Tester"] = "Linh"
+    metadata["Base URL"] = base_url
+    
