@@ -1,7 +1,7 @@
 from rich import print
 import pytest
 
-@pytest.mark.apionly
+@pytest.mark.api
 def test_a1_sign_up_success(api, user_info, clean_account):  
     payload = {
                 "first_name": user_info["first_name"],
@@ -26,7 +26,7 @@ def test_a1_sign_up_success(api, user_info, clean_account):
     assert response.status == 201
     clean_account.append(response.json()["id"])
 
-@pytest.mark.apionly  
+@pytest.mark.api 
 def test_a2_sign_up_with_body_empty (api):
     payload = {
     }
@@ -37,7 +37,7 @@ def test_a2_sign_up_with_body_empty (api):
     assert response.json()["email"] == ['The email field is required.']
     assert response.json()["password"] == ['The password field is required.']
 
-@pytest.mark.apionly
+@pytest.mark.api
 def test_a3_login_success(api, create_account):
     payload = {
         "email": create_account["email"],
@@ -47,7 +47,7 @@ def test_a3_login_success(api, create_account):
     assert response.status == 200
     assert response.json()["access_token"]
 
-@pytest.mark.apionly 
+@pytest.mark.api 
 def test_a4_login_failed (api):
     payload = {
         "email": "nobody.invalid@example.com",
