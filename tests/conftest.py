@@ -2,6 +2,7 @@ import pytest
 import uuid
 from pages.home import HomePage
 from pages.product_page import ProductPage
+from playwright.sync_api import expect
 
 API_URLS	 = {
     "https://practicesoftwaretesting.com": "https://api.practicesoftwaretesting.com",
@@ -31,13 +32,17 @@ def api(playwright, api_url):
     context.dispose()
     
 @pytest.fixture
-def random_email():
+def user_info():
     name = uuid.uuid4().hex[8]
     email = f"{name}@example.com"
-    return email    
+    infor = {
+        "email" : email,
+        "password" : "Supessaaar111Secure@123"
+    }
+    return infor    
     
 @pytest.fixture
-def create_account(api, random_email):
+def create_account(api, user_info):
     payload = {
                 "first_name": "AABBCC",
                 "last_name": "EEFFHH",
@@ -51,8 +56,8 @@ def create_account(api, random_email):
                 },
                 "phone": "0987654321",
                 "dob": "1970-01-01",
-                "password": "Supessaaar111Secure@123",
-                "email": random_email
+                "password": user_info["password"],
+                "email": user_info["email"]
     }
     response = api.post(
         "users/register",
@@ -103,3 +108,11 @@ def product_detail_page(page, product_id):
     product_detail_page = ProductPage(page)
     product_detail_page.open_product_detail(product_id["id"])
     return product_detail_page
+
+@pytest.fixture
+def sort_low_to_high(home_page):
+    home_page.sort_low_to_high()
+    expect(home_page.page.locator('[data-test="sorting_completed"]')).to_be_visible()
+    prices = home_page.product_price.all_inner_texts()
+    numbers = [float(text.replace("$", "")) for text in prices]
+    return numbers

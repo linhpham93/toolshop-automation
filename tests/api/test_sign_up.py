@@ -1,6 +1,29 @@
 from rich import print
 
-def test_sign_up_with_body_empty (api):
+def test_a1_sign_up_success(api, user_info):  
+    payload = {
+                "first_name": "AABBCC",
+                "last_name": "EEFFHH",
+                "address": {
+                    "street": "Street 1",
+                    "house_number": "12",
+                    "city": "City",
+                    "state": "State",
+                    "country": "Country",
+                    "postal_code": "1234AA"
+                },
+                "phone": "0987654321",
+                "dob": "1970-01-01",
+                "password": user_info["password"],
+                "email": user_info["email"]
+    }
+    response = api.post(
+        "users/register",
+        data = payload
+    )
+    assert response.status == 201
+    
+def test_a2_sign_up_with_body_empty (api):
     payload = {
     }
     response = api.post("users/register", data=payload)
@@ -10,7 +33,7 @@ def test_sign_up_with_body_empty (api):
     assert response.json()["email"] == ['The email field is required.']
     assert response.json()["password"] == ['The password field is required.']
 
-def test_login_success(api, create_account):
+def test_a3_login_success(api, create_account):
     payload = {
         "email": create_account["email"],
         "password": create_account["password"]
@@ -20,7 +43,7 @@ def test_login_success(api, create_account):
     assert response.json()["access_token"]
  
     
-def test_login_failed (api):
+def test_a4_login_failed (api):
     payload = {
         "email": "nobody.invalid@example.com",
         "password": "wrong-password-1"
