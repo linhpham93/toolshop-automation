@@ -28,11 +28,11 @@ jobs:
       - name: Install browser
         run: python -m playwright install --with-deps chromium
       - name: Run tests
-        run: pytest tests
+        run: pytest -n 2
       - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: test-report
-          path: reports/
+          path: report.html
           retention-days: 7
