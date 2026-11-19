@@ -2,6 +2,7 @@ import pytest
 import uuid
 from pages.home import HomePage
 from pages.product_page import ProductPage
+from playwright.sync_api import expect
 
 API_URLS	 = {
     "https://practicesoftwaretesting.com": "https://api.practicesoftwaretesting.com",
@@ -29,18 +30,36 @@ def api(playwright, api_url):
     context = playwright.request.new_context(base_url = api_url)
     yield context
     context.dispose()
+
+@pytest.fixture
+def admin_token(api):
+    payload_admin = {
+     "email": "admin@practicesoftwaretesting.com",
+    "password": "welcome01"
+    }
+    admin_login = api.post("users/login", data=payload_admin)
+    print("Admin login")
+    assert admin_login.status == 200
+    token_admin = admin_login.json()["access_token"]
+    return token_admin
+
+@pytest.fixture
+def user_info():
+    first_name = uuid.uuid4().hex[8]
+    email = f"{first_name}@example.com"
+    infor = {
+        "first_name" : first_name,
+        "last_name" : "QA",
+        "email" : email,
+        "password" : "Supessaaar111Secure@123"
+    }
+    return infor    
     
 @pytest.fixture
-def random_email():
-    name = uuid.uuid4().hex[8]
-    email = f"{name}@example.com"
-    return email    
-    
-@pytest.fixture
-def create_account(api, random_email):
+def create_account(api, user_info, admin_token):
     payload = {
-                "first_name": "AABBCC",
-                "last_name": "EEFFHH",
+                "first_name": user_info["first_name"],
+                "last_name": user_info["last_name"],
                 "address": {
                     "street": "Street 1",
                     "house_number": "12",
@@ -51,8 +70,8 @@ def create_account(api, random_email):
                 },
                 "phone": "0987654321",
                 "dob": "1970-01-01",
-                "password": "Supessaaar111Secure@123",
-                "email": random_email
+                "password": user_info["password"],
+                "email": user_info["email"]
     }
     response = api.post(
         "users/register",
@@ -60,24 +79,24 @@ def create_account(api, random_email):
     )
     assert response.status == 201
     user_id = response.json()["id"]
-    print("Create account")
     yield payload
-
-    payload_admin = {
-     "email": "admin@practicesoftwaretesting.com",
-    "password": "welcome01"
-    }
-    admin_login = api.post("users/login", data=payload_admin)
-    print("Admin login")
-    assert admin_login.status == 200
-    token_admin = admin_login.json()["access_token"]
 
     admin_delete_user = api.delete(
         f"users/{user_id}",
-        headers={"Authorization": f"Bearer {token_admin}"}
+        headers={"Authorization": f"Bearer {admin_token}"}
         )
     assert admin_delete_user.status == 204
-    print("Admin delected user")
+
+@pytest.fixture
+def clean_account(api, admin_token):
+    list_account_id = []
+    yield list_account_id
+    for id in list_account_id:
+        admin_delete_user = api.delete(
+            f"users/{id}",
+            headers={"Authorization": f"Bearer {admin_token}"}
+        )
+    assert admin_delete_user.status == 204
 
 @pytest.fixture
 def home_page(page):
@@ -103,3 +122,13 @@ def product_detail_page(page, product_id):
     product_detail_page = ProductPage(page)
     product_detail_page.open_product_detail(product_id["id"])
     return product_detail_page
+
+@pytest.fixture
+def sort_low_to_high_result(home_page):
+    home_page.sort_low_to_high()
+    expect(home_page.page.locator('[data-test="sorting_completed"]')).to_be_visible()
+    prices = home_page.product_price.all_inner_texts()
+    numbers = [float(text.replace("$", "")) for text in prices]
+    print(numbers)
+    return numbers
+

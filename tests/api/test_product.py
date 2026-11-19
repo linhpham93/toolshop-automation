@@ -1,6 +1,6 @@
 from rich import print
 
-def test_get_product(api):
+def test_a5_get_product(api):
     response_product_list = api.get("products?page=1")
     product_id = response_product_list.json()["data"][0]["id"]
     
