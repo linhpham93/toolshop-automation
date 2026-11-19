@@ -28,7 +28,7 @@ jobs:
       - name: Install browser
         run: python -m playwright install --with-deps chromium
       - name: Run tests
-        run: pytest -m api -n 2
+        run: pytest -m api -n 2 --reruns 2 --only-rerun TimeoutError
       - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v7

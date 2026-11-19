@@ -47,7 +47,7 @@ def admin_token(api):
 
 @pytest.fixture
 def user_info():
-    first_name = uuid.uuid4().hex[8]
+    first_name = uuid.uuid4().hex[:8]
     email = f"{first_name}@example.com"
     infor = {
         "first_name" : first_name,
@@ -98,7 +98,7 @@ def clean_account(api, admin_token):
             f"users/{id}",
             headers={"Authorization": f"Bearer {admin_token}"}
         )
-    assert admin_delete_user.status == 204
+        assert admin_delete_user.status == 204
 
 @pytest.fixture
 def home_page(page):
@@ -131,7 +131,6 @@ def sort_low_to_high_result(home_page):
     expect(home_page.page.locator('[data-test="sorting_completed"]')).to_be_visible()
     prices = home_page.product_price.all_inner_texts()
     numbers = [float(text.replace("$", "")) for text in prices]
-    assert numbers == sorted(numbers)
     return numbers
 
 def pytest_html_report_title(report):

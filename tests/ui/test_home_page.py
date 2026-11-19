@@ -12,7 +12,7 @@ def test_u2_search_product(home_page):
     expect(home_page.page.locator('[data-test="search_completed"]')).to_be_visible()
     names = home_page.product_item.all_inner_texts()
     for key in names:
-        assert key != []
+        assert names != []
         assert "pliers" in key.lower()
         
 @pytest.mark.ui

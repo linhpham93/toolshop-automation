@@ -1,7 +1,6 @@
 from playwright.sync_api import expect
 from pages.login_page import LoginPage
 from rich import print
-import time
 import pytest
 
 @pytest.mark.combined
@@ -46,7 +45,6 @@ def test_k4_search(api, home_page):
 def test_k5_sort_by_price(api, sort_low_to_high_result):
     response = api.get("products?sort=price,asc&page=1")
     assert response.status == 200
-    time.sleep(5)
     price_api = []
     for product in response.json()["data"]:
         price_api.append(product["price"])
