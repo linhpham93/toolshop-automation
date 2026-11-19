@@ -1,9 +1,9 @@
 from rich import print
 
-def test_a1_sign_up_success(api, user_info):  
+def test_a1_sign_up_success(api, user_info, clean_account):  
     payload = {
-                "first_name": "AABBCC",
-                "last_name": "EEFFHH",
+                "first_name": user_info["first_name"],
+                "last_name": user_info["last_name"],
                 "address": {
                     "street": "Street 1",
                     "house_number": "12",
@@ -22,6 +22,7 @@ def test_a1_sign_up_success(api, user_info):
         data = payload
     )
     assert response.status == 201
+    clean_account.append(response.json()["id"])
     
 def test_a2_sign_up_with_body_empty (api):
     payload = {
@@ -41,7 +42,6 @@ def test_a3_login_success(api, create_account):
     response = api.post("users/login", data=payload)
     assert response.status == 200
     assert response.json()["access_token"]
- 
     
 def test_a4_login_failed (api):
     payload = {

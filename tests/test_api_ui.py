@@ -7,7 +7,7 @@ def test_k1_login_succes(page, create_account):
     login_page =  LoginPage(page)
     login_page.open_page()
     login_page.sign_in(create_account["email"], create_account["password"])
-    expect.page.to_have_url("/account")
+    expect(login_page.page).to_have_url("/account")
 
 def test_k2_product_shows_correctly(product_detail_page, product_id):
     expect(product_detail_page.product_name).to_have_text(product_id["name"])
@@ -37,11 +37,12 @@ def test_k4_search(api, home_page):
     print(search_result_UI)
     assert sorted(search_result_api) == sorted(search_result_UI)
     
-def test_k5_sort_by_price(api, sort_low_to_high):
+def test_k5_sort_by_price(api, sort_low_to_high_result):
     response = api.get("products?sort=price,asc&page=1")
     assert response.status == 200
     price_api = []
     for product in response.json()["data"]:
         price_api.append(product["price"])
-    assert price_api == sort_low_to_high
+    print(price_api)
+    assert price_api == sort_low_to_high_result
     
