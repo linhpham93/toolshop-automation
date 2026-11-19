@@ -1,6 +1,8 @@
 from pages.singup_page import SignupPage
 from playwright.sync_api import expect
+import pytest
 
+@pytest.mark.ui
 def test_u5_register_failed(page):
     auth_page = SignupPage(page)
     auth_page.open_page()
