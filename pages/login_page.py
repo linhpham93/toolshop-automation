@@ -1,12 +1,14 @@
-class Login_page():
+class LoginPage():
     def __init__(self, page):
         self.page = page
-        self.email_locator = page.get_by_role("textbox", name="Email address *")
-        self.password_locator = page.get_by_role("textbox", name="password*")
+        self.email_field = page.get_by_role("textbox", name="Email address *")
+        self.password_field = page.get_by_role("textbox", name="Email address *")
         self.login_btn = page.get_by_role("button", name="Login")
-        
-    def login(self, email, password):
-        self.page.goto("auth/login")
-        self.email_locator.fill(email)
-        self.email_locator.fill(password)
+
+    def open_page(self):
+        self.page.goto("/auth/login")
+
+    def sign_in(self, email, password):
+        self.email_field.fill(email)
+        self.password_field(password)
         self.login_btn.click()

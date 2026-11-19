@@ -1,6 +1,6 @@
 from rich import print
 
-def test_get_product_list(api):
+def test_get_product(api):
     response_product_list = api.get("products?page=1")
     product_id = response_product_list.json()["data"][0]["id"]
     
@@ -13,3 +13,7 @@ def test_get_product_list(api):
     body = response_product_detail.json()
     for key in expected_keys:
         assert key in body
+
+    response_incorrct_product_detail = api.get(f"products/00000000000000000000000000")
+    assert response_incorrct_product_detail.status == 404
+    assert response_incorrct_product_detail.json()["message"] == "Requested item not found"
