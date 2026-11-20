@@ -4,7 +4,6 @@ from pages.home import HomePage
 from pages.product_page import ProductPage
 from playwright.sync_api import expect
 from datetime import datetime
-import time
 
 API_URLS	 = {
     "https://practicesoftwaretesting.com": "https://api.practicesoftwaretesting.com",

@@ -1,5 +1,4 @@
 from playwright.sync_api import Page, expect
-import time
 import pytest
 
 @pytest.mark.ui
@@ -11,8 +10,8 @@ def test_u2_search_product(home_page):
     home_page.search_product("pliers")
     expect(home_page.page.locator('[data-test="search_completed"]')).to_be_visible()
     names = home_page.product_item.all_inner_texts()
+    assert len(names) > 2
     for key in names:
-        assert names != []
         assert "pliers" in key.lower()
         
 @pytest.mark.ui
