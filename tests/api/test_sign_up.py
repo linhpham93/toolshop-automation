@@ -44,6 +44,7 @@ def test_a3_login_success(api, create_account):
         "password": create_account["password"]
     }
     response = api.post("users/login", data=payload)
+    print(list(response.json().keys()))
     assert response.status == 200
     assert response.json()["access_token"]
 
