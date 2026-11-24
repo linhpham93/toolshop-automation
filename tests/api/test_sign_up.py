@@ -37,6 +37,7 @@ def test_a2_sign_up_with_body_empty (api):
     assert response.json()["email"] == ['The email field is required.']
     assert response.json()["password"] == ['The password field is required.']
 
+@pytest.mark.smoke
 @pytest.mark.api
 def test_a3_login_success(api, create_account):
     payload = {
@@ -44,7 +45,6 @@ def test_a3_login_success(api, create_account):
         "password": create_account["password"]
     }
     response = api.post("users/login", data=payload)
-    print(list(response.json().keys()))
     assert response.status == 200
     assert response.json()["access_token"]
 
