@@ -16,4 +16,4 @@ def test_u2_search_product(home_page):
         
 @pytest.mark.ui
 def test_u3_sort_low_to_high(sort_low_to_high_result):
-    assert sort_low_to_high_result == sorted(sort_low_to_high_result, reverse=False)
+    assert sort_low_to_high_result == sorted(sort_low_to_high_result)
