@@ -1,4 +1,5 @@
 from rich import print
+from data.accounts import INVALID_LOGINS
 import pytest
 
 @pytest.mark.api
@@ -48,12 +49,17 @@ def test_a3_login_success(api, create_account):
     assert response.status == 200
     assert response.json()["access_token"]
 
-@pytest.mark.api 
-def test_a4_login_failed (api):
-    payload = {
-        "email": "nobody.invalid@example.com",
-        "password": "wrong-password-1"
-    }
-    response = api.post("users/login", data=payload)
-    assert response.status == 401
-    assert response.json()["error"] == "Unauthorized"
+@pytest.mark.api
+@pytest.mark.parametrize(
+    "accounts",
+    INVALID_LOGINS,
+    ids = ["incorrect_email", "missing_password"]   
+)
+def test_a4_login_failed (api, accounts):
+    response = api.post(
+        "users/login",
+        data={
+            "email" : accounts["email"],
+            "password" : accounts["password"],
+        })
+    assert response.status == accounts["expected_code"]

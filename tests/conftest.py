@@ -35,7 +35,7 @@ def api(playwright, api_url):
 @pytest.fixture
 def admin_token(api):
     payload_admin = {
-     "email": "admin@practicesoftwaretesting.com",
+    "email": "admin@practicesoftwaretesting.com",
     "password": "welcome01"
     }
     admin_login = api.post("users/login", data=payload_admin)

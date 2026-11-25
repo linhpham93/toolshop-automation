@@ -10,6 +10,7 @@ Toolshop automation is a Python test suite built with **pytest** and **Playwrigh
 ├── .github/
 │   └── workflows/
 │       └── tests.yml       # GitHub Actions test workflow
+├── data/                   # Account data
 ├── pages/                  # Page object classes
 ├── tests/
 │   ├── api/                # API test cases
