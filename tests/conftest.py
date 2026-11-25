@@ -4,6 +4,7 @@ from pages.home import HomePage
 from pages.product_page import ProductPage
 from playwright.sync_api import expect
 from datetime import datetime
+from data.accounts import ADMIN
 
 API_URLS	 = {
     "https://practicesoftwaretesting.com": "https://api.practicesoftwaretesting.com",
@@ -35,8 +36,8 @@ def api(playwright, api_url):
 @pytest.fixture
 def admin_token(api):
     payload_admin = {
-    "email": "admin@practicesoftwaretesting.com",
-    "password": "welcome01"
+    "email": ADMIN["email"],
+    "password": ADMIN["password"]
     }
     admin_login = api.post("users/login", data=payload_admin)
     print("Admin login")
