@@ -1,0 +1,1 @@
+ADMIN = {"email": "admin@practicesoftwaretesting.com", "password": "welcome01"}

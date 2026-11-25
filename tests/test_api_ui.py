@@ -44,5 +44,5 @@ def test_k5_sort_by_price(api, sort_low_to_high_result):
     price_api = []
     for product in response.json()["data"]:
         price_api.append(product["price"])
-    assert price_api == sorted(price_api,  reverse=False)
+    assert price_api == sorted(price_api)
     assert price_api == sort_low_to_high_result
