@@ -34,10 +34,12 @@ def test_k4_search(api, home_page):
     for product in response.json()["data"]:
         search_result_api.append(product["name"])
         print(search_result_api)
+    assert search_result_api != []
     
     home_page.search_product(keyword)
     expect(home_page.page.locator('[data-test="search_completed"]')).to_be_visible()
     search_result_UI = home_page.product_item.all_inner_texts()
+    assert search_result_UI != []
     print(search_result_UI)
     assert sorted(search_result_api) == sorted(search_result_UI)
 
@@ -49,5 +51,6 @@ def test_k5_sort_by_price(api, sort_low_to_high_result):
     price_api = []
     for product in response.json()["data"]:
         price_api.append(product["price"])
+    assert price_api != []
     assert price_api == sorted(price_api)
     assert price_api == sort_low_to_high_result

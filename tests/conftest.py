@@ -132,6 +132,7 @@ def sort_low_to_high_result(home_page):
     expect(home_page.page.locator('[data-test="sorting_completed"]')).to_be_visible()
     prices = home_page.product_price.all_inner_texts()
     numbers = [float(text.replace("$", "")) for text in prices]
+    assert numbers != []
     return numbers
 
 def pytest_html_report_title(report):
