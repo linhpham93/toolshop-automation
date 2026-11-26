@@ -104,6 +104,7 @@ def clean_account(api, admin_token):
 def home_page(page):
     home = HomePage(page)
     home.open_home_page()
+    expect(home.product_item).to_have_count(9)
     yield home
 
 @pytest.fixture
@@ -141,4 +142,3 @@ def pytest_metadata(metadata, config):
     metadata["Environment"] = "Practice site"
     metadata["Tester"] = "Linh"
     metadata["Base URL"] = base_url
-    
